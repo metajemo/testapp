@@ -44,10 +44,14 @@ def index():
 @app.route('/add_entry', methods=['GET', 'POST'])
 def add_entry():
     ''' '''
-    if request.methods = 'POST':
+    print dir(request)
+    if request.method == 'POST':
+        g.db.execute('insert into entries title, text values (?, ?)',
+                      [request.form['title'], request.form['text']])
+        g.db.commit()
         return redirect(url_for('index'))
-    #TODO get the data into the database
     return render_template('add_entry.html')
+
 
 if __name__ == '__main__':
     app.run()
