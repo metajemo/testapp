@@ -1,8 +1,11 @@
 import sqlite3
-from flask import Flask, g, render_template, request, redirect, url_for
+from flask import Flask, g, render_template, request, redirect, url_for, flash
 from contextlib import closing
-#TODO add option to populate entries
 
+#TODO make flash works
+#TODO add loggin...
+#TODO add option each entry to be deleted by user (if it is his/her entry)
+#TODO add usenames to table
 DEBUG = True
 DATABASE = 'testapp.db'
 app = Flask(__name__)
@@ -36,6 +39,7 @@ def teardown_request(exception):
 @app.route('/')
 def index():
     ''' '''
+    print request.args
     c = g.db.execute('select title, text from entries order by id desc')
     entries = [dict(title=title, text=text) for title, text in c.fetchall()]
     return render_template('index.html', entries=entries)
@@ -44,9 +48,8 @@ def index():
 @app.route('/add_entry', methods=['GET', 'POST'])
 def add_entry():
     ''' '''
-    print dir(request)
     if request.method == 'POST':
-        g.db.execute('insert into entries title, text values (?, ?)',
+        g.db.execute('insert into entries (title, text) values (?, ?)',
                       [request.form['title'], request.form['text']])
         g.db.commit()
         return redirect(url_for('index'))

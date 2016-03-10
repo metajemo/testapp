@@ -1,10 +1,13 @@
 <html>
 Hello, World!<br>
-<a href={{url_for('add_entry')}}>Add</a>
+<div>
+<a href={{url_for('add_entry')}}>Add</a></div>
+{% for message in get_flashed_messages() %}
+{% endfor %}
 Entries content below:
 <ul>
 {% for entry in entries %}
-    <li>{{entry.title}}</li>
+    <li>{{entry.title}} <a href="">delete</a></li>
 {% else %}
     <li>No entries in the database...</li>
 {% endfor %}
